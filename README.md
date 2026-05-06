@@ -1,32 +1,22 @@
-# Prost in Kotlin
+# prost-kotlin in Kotlin
 
 [![GitHub link](https://img.shields.io/badge/GitHub-KotlinMania%2Fprost--kotlin-blue.svg)](https://github.com/KotlinMania/prost-kotlin)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.kotlinmania/prost-kotlin)](https://central.sonatype.com/artifact/io.github.kotlinmania/prost-kotlin)
 [![Build status](https://img.shields.io/github/actions/workflow/status/KotlinMania/prost-kotlin/ci.yml?branch=main)](https://github.com/KotlinMania/prost-kotlin/actions)
 
-Kotlin Multiplatform line-by-line clean-room port of the Rust crate [`prost`](https://crates.io/crates/prost).
+This is a Kotlin Multiplatform line-by-line transliteration port of [`tokio-rs/pros`](https://github.com/tokio-rs/prost).
 
-> **Status: scaffold — porting has not started.** This repo currently contains build infrastructure only. The upstream Rust source for the `prost` crate will be cloned into `tmp/` (gitignored) when porting begins.
+**Original Project:** This port is based on [`tokio-rs/pros`](https://github.com/tokio-rs/prost). All design credit and project intent belong to the upstream authors; this repository is a faithful port to Kotlin Multiplatform with no behavioural changes intended.
 
-## About
+### Porting status
 
-Protocol Buffers codegen and runtime
+This is an **in-progress port**. The goal is feature parity with the upstream Rust crate while providing a native Kotlin Multiplatform API. Every Kotlin file carries a `// port-lint: source <path>` header naming its upstream Rust counterpart so the AST-distance tool can track provenance.
 
-This port targets functional parity with the upstream Rust crate while presenting an idiomatic Kotlin Multiplatform API. Every Kotlin file is a faithful translation of an upstream Rust file and carries a `// port-lint: source <path>` header so the AST-distance tool can track provenance.
+---
 
-## Supported targets
+## About this Kotlin port
 
-- macOS arm64 / x64
-- Linux x64
-- Windows mingw-x64
-- iOS arm64 / x64 / simulator-arm64
-- JS (browser + Node.js)
-- Wasm-JS (browser + Node.js)
-- Android (API 24+)
-
-## Installation
-
-Once published:
+### Installation
 
 ```kotlin
 dependencies {
@@ -34,19 +24,34 @@ dependencies {
 }
 ```
 
-## Build
+### Building
 
 ```bash
 ./gradlew build
 ./gradlew test
 ```
 
-## Porting guidelines
+### Targets
 
-See [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) for translator discipline, port-lint header convention, and Rust → Kotlin idiom mapping.
+- macOS arm64
+- Linux x64
+- Windows mingw-x64
+- iOS arm64 / simulator-arm64 (Swift export + XCFramework)
+- JS (browser + Node.js)
+- Wasm-JS (browser + Node.js)
+- Android (API 24+)
 
-## License
+### Porting guidelines
 
-Apache 2.0 — see [LICENSE](LICENSE).
+See [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md) for translator discipline, port-lint header convention, and Rust → Kotlin idiom mapping.
 
-Original work copyrighted by the upstream `prost` authors. Kotlin port copyright (c) 2026 Sydney Renee and The Solace Project.
+### License
+
+This Kotlin port is distributed under the same Apache-2.0 license as the upstream [`tokio-rs/pros`](https://github.com/tokio-rs/prost). See [LICENSE](LICENSE) (and any sibling `LICENSE-*` / `NOTICE` files mirrored from upstream) for the full text.
+
+Original work copyrighted by the pros authors.  
+Kotlin port: Copyright (c) 2026 Sydney Renee and The Solace Project.
+
+### Acknowledgments
+
+Thanks to the [`tokio-rs/pros`](https://github.com/tokio-rs/prost) maintainers and contributors for the original Rust implementation. This port reproduces their work in Kotlin Multiplatform; bug reports about upstream design or behavior should go to the upstream repository.
