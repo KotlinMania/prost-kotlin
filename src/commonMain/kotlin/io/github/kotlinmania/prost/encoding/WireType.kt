@@ -9,7 +9,9 @@ import io.github.kotlinmania.prost.DecodeErrorKind
  *
  * The integer value is equvilant with the encoded value.
  */
-enum class WireType(val code: UByte) {
+enum class WireType(
+    val code: UByte,
+) {
     Varint(0u),
     SixtyFourBit(1u),
     LengthDelimited(2u),
@@ -19,15 +21,16 @@ enum class WireType(val code: UByte) {
     ;
 
     companion object {
-        fun tryFrom(value: ULong): Result<WireType> = when (value) {
-            0uL -> Result.success(Varint)
-            1uL -> Result.success(SixtyFourBit)
-            2uL -> Result.success(LengthDelimited)
-            3uL -> Result.success(StartGroup)
-            4uL -> Result.success(EndGroup)
-            5uL -> Result.success(ThirtyTwoBit)
-            else -> Result.failure(DecodeError(DecodeErrorKind.InvalidWireType(value = value)))
-        }
+        fun tryFrom(value: ULong): Result<WireType> =
+            when (value) {
+                0uL -> Result.success(Varint)
+                1uL -> Result.success(SixtyFourBit)
+                2uL -> Result.success(LengthDelimited)
+                3uL -> Result.success(StartGroup)
+                4uL -> Result.success(EndGroup)
+                5uL -> Result.success(ThirtyTwoBit)
+                else -> Result.failure(DecodeError(DecodeErrorKind.InvalidWireType(value = value)))
+            }
     }
 }
 

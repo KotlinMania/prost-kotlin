@@ -15,7 +15,6 @@ import io.github.kotlinmania.prost.encoding.WireType
  * general it is not possible to exactly pinpoint why data is malformed.
  */
 class DecodeError : Exception {
-
     internal val description: DecodeErrorKind
     private val stack: MutableList<Pair<String, String>>
 
@@ -49,16 +48,17 @@ class DecodeError : Exception {
     }
 
     override val message: String
-        get() = buildString {
-            append("failed to decode Protobuf message: ")
-            for ((messageName, fieldName) in stack) {
-                append(messageName)
-                append('.')
-                append(fieldName)
-                append(": ")
+        get() =
+            buildString {
+                append("failed to decode Protobuf message: ")
+                for ((messageName, fieldName) in stack) {
+                    append(messageName)
+                    append('.')
+                    append(fieldName)
+                    append(": ")
+                }
+                append(description.toString())
             }
-            append(description.toString())
-        }
 
     override fun toString(): String =
         "DecodeError(description=$description, stack=$stack)"
@@ -96,12 +96,16 @@ internal sealed class DecodeErrorKind {
     }
 
     /** Invalid wire type value */
-    data class InvalidWireType(val value: ULong) : DecodeErrorKind() {
+    data class InvalidWireType(
+        val value: ULong,
+    ) : DecodeErrorKind() {
         override fun toString(): String = "invalid wire type value: $value"
     }
 
     /** Invalid key value */
-    data class InvalidKey(val key: ULong) : DecodeErrorKind() {
+    data class InvalidKey(
+        val key: ULong,
+    ) : DecodeErrorKind() {
         override fun toString(): String = "invalid key value: $key"
     }
 
@@ -139,13 +143,18 @@ internal sealed class DecodeErrorKind {
     }
 
     /** Unexpected type URL */
-    data class UnexpectedTypeUrl(val actual: String, val expected: String) : DecodeErrorKind() {
+    data class UnexpectedTypeUrl(
+        val actual: String,
+        val expected: String,
+    ) : DecodeErrorKind() {
         override fun toString(): String =
             "unexpected type URL.type_url: expected type URL: \"$expected\" (got: \"$actual\")"
     }
 
     /** A textual description of a problem */
-    data class Other(val description: String) : DecodeErrorKind() {
+    data class Other(
+        val description: String,
+    ) : DecodeErrorKind() {
         override fun toString(): String = description
     }
 }
@@ -161,7 +170,6 @@ class EncodeError internal constructor(
     private val required: Int,
     private val remaining: Int,
 ) : Exception() {
-
     /** Returns the required buffer capacity to encode the message. */
     fun requiredCapacity(): Int = required
 
@@ -169,8 +177,9 @@ class EncodeError internal constructor(
     fun remaining(): Int = remaining
 
     override val message: String
-        get() = "failed to encode Protobuf message; insufficient buffer capacity " +
-            "(required: $required, remaining: $remaining)"
+        get() =
+            "failed to encode Protobuf message; insufficient buffer capacity " +
+                "(required: $required, remaining: $remaining)"
 
     override fun toString(): String = "EncodeError(required=$required, remaining=$remaining)"
 
@@ -187,8 +196,9 @@ class EncodeError internal constructor(
  * error's value represents an integer value unrecognized by the
  * presently used enum definition.
  */
-data class UnknownEnumValue(val value: Int) : Exception() {
-
+data class UnknownEnumValue(
+    val value: Int,
+) : Exception() {
     override val message: String
         get() = "unknown enumeration value $value"
 }
