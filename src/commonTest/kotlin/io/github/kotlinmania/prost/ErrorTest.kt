@@ -1,4 +1,4 @@
-// port-lint: source src/error.rs
+// port-lint: tests error.rs
 package io.github.kotlinmania.prost
 
 import kotlin.test.Test
@@ -16,4 +16,6 @@ class ErrorTest {
             decodeError.message,
         )
     }
+
+    // testIntoStdIoError unported: std::io::Error conversion is specific to Rust std library and does not apply to Kotlin Multiplatform common errors.
 }

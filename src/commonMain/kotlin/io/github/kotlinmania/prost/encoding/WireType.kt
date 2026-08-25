@@ -1,4 +1,4 @@
-// port-lint: source src/encoding/wire_type.rs
+// port-lint: source encoding/wire_type.rs
 package io.github.kotlinmania.prost.encoding
 
 import io.github.kotlinmania.prost.DecodeError

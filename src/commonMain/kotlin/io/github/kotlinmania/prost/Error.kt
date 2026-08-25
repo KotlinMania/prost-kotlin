@@ -1,4 +1,4 @@
-// port-lint: source src/error.rs
+// port-lint: source error.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.prost.encoding.WireType
@@ -11,7 +11,7 @@ import io.github.kotlinmania.prost.encoding.WireType
  * A Protobuf message decoding error.
  *
  * [DecodeError] indicates that the input buffer does not contain a valid
- * Protobuf message. The error details should be considered 'best effort': in
+ * Protobuf message. The error details should be considered "best effort": in
  * general it is not possible to exactly pinpoint why data is malformed.
  */
 class DecodeError : Exception {
@@ -24,7 +24,7 @@ class DecodeError : Exception {
     }
 
     /**
-     * Creates a new [DecodeError] with a 'best effort' root cause description.
+     * Creates a new [DecodeError] with a "best effort" root cause description.
      *
      * Meant to be used only by [Message] implementations.
      */
@@ -72,7 +72,7 @@ class DecodeError : Exception {
         /**
          * Creates a new [DecodeError] with a [DecodeErrorKind.UnexpectedTypeUrl].
          *
-         * Must only be used by `prost_types::Any` implementation.
+         * Must only be used by `Any` implementation.
          */
         fun newUnexpectedTypeUrl(actual: String, expected: String): DecodeError =
             DecodeError(DecodeErrorKind.UnexpectedTypeUrl(actual = actual, expected = expected))
@@ -80,9 +80,9 @@ class DecodeError : Exception {
 }
 
 internal sealed class DecodeErrorKind {
-    /** Length delimiter exceeds maximum usize value */
+    /** Length delimiter exceeds maximum size value */
     data object LengthDelimiterTooLarge : DecodeErrorKind() {
-        override fun toString(): String = "length delimiter exceeds maximum usize value"
+        override fun toString(): String = "length delimiter exceeds maximum size value"
     }
 
     /** Invalid varint */
@@ -192,7 +192,7 @@ class EncodeError internal constructor(
 /**
  * An error indicating that an unknown enumeration value was encountered.
  *
- * The Protobuf spec mandates that enumeration value sets are 'open', so this
+ * The Protobuf spec mandates that enumeration value sets are "open", so this
  * error's value represents an integer value unrecognized by the
  * presently used enum definition.
  */
