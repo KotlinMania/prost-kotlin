@@ -3,6 +3,7 @@ kotlin = "2.4.0"
 coroutines = "1.11.0"
 serialization = "1.11.0"
 collectionsImmutable = "0.5.1"
+bytes = "0.2.1"
 androidKmp = "9.2.1"
 detekt = "1.23.8"
 ktlint = "14.2.0"
@@ -22,6 +23,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
+bytes-kotlin = { module = "io.github.kotlinmania:bytes-kotlin", version.ref = "bytes" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinxBenchmark" }
 
 [bundles]
@@ -30,4 +32,5 @@ prost-commonMain = [
   "kotlinx-serialization-core",
   "kotlinx-serialization-json",
   "collections-immutable",
+  "bytes-kotlin",
 ]
