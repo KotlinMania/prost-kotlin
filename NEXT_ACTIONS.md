@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 2/9 (22.2%)
-- **Function parity:** 7/133 matched (target 26) — 5.3%
-- **Class/type parity:** 5/12 matched (target 19) — 41.7%
-- **Combined symbol parity:** 12/145 matched (target 45) — 8.3%
-- **Average inline-code cosine:** 0.51 (function body across 2 matched files)
-- **Average documentation cosine:** 0.99 (doc text across 2 matched files)
-- **Cheat-zeroed Files:** 0
-- **Critical Issues:** 1 files with <0.60 function similarity
+- **Files Present:** 9/9 (100.0%)
+- **Function parity:** 44/68 matched (target 266) — 64.7%
+- **Class/type parity:** 8/12 matched (target 55) — 66.7%
+- **Combined symbol parity:** 52/80 matched (target 321) — 65.0%
+- **Average inline-code cosine:** 0.47 (function body across 9 matched files)
+- **Average documentation cosine:** 0.78 (doc text across 9 matched files)
+- **Cheat-zeroed Files:** 1
+- **Critical Issues:** 7 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -27,7 +27,18 @@ No missing high-value files detected.
 
 Every matched file is listed below with function and type symbol parity.
 
-### 1. encoding.wire_type
+### 1. message
+
+- **Target:** `prost.Message`
+- **Similarity:** 0.45
+- **Dependents:** 4
+- **Priority Score:** 4041305.5
+- **Functions:** 8/12 matched (target 18)
+- **Missing functions:** `encode_to_vec`, `encode_length_delimited_to_vec`, `decode`, `decode_length_delimited`
+- **Types:** 1/1 matched (target 3)
+- **Missing types:** _none_
+
+### 2. encoding.wire_type
 
 - **Target:** `encoding.WireType`
 - **Similarity:** 0.75
@@ -38,7 +49,31 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Error`
 
-### 2. error
+### 3. name
+
+- **Target:** `prost.Name`
+- **Similarity:** 0.47
+- **Dependents:** 2
+- **Priority Score:** 2000305.2
+- **Functions:** 2/2 matched
+- **Missing functions:** _none_
+- **Types:** 1/1 matched
+- **Missing types:** _none_
+
+### 4. encoding
+
+- **Target:** `encoding.Encoding`
+- **Similarity:** 0.50
+- **Dependents:** 0
+- **Priority Score:** 132705.0
+- **Functions:** 13/24 matched (target 152)
+- **Missing functions:** `default`, `drop`, `is_empty`, `len`, `replace_with`, `append_to`, `merge_one_copy`, `check_type`, `check_collection_type`, `string_merge_invalid_utf8`, `split_varint_decoding`
+- **Types:** 1/3 matched (target 20)
+- **Missing types:** `DropGuard`, `BytesAdapter`
+- **Tests:** 0/4 matched
+- **Lint issues:** 16
+
+### 5. error
 
 - **Target:** `prost.Error`
 - **Similarity:** 0.27
@@ -50,6 +85,53 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `Inner`
 - **Tests:** 1/2 matched
 
+### 6. encoding.varint
+
+- **Target:** `encoding.Varint`
+- **Similarity:** 0.49
+- **Dependents:** 0
+- **Priority Score:** 40905.1
+- **Functions:** 5/9 matched (target 8)
+- **Missing functions:** `varint`, `check`, `varint_overflow`, `variant_slow_overflow`
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+- **Tests:** 0/4 matched
+
+### 7. types
+
+- **Target:** `prost.Types`
+- **Similarity:** 0.47
+- **Dependents:** 0
+- **Priority Score:** 10705.3
+- **Functions:** 6/7 matched (target 55)
+- **Missing functions:** `googleapis_type_url_for`
+- **Types:** 0/0 matched (target 11)
+- **Missing types:** _none_
+- **Tests:** 1/1 matched
+- **Lint issues:** 1
+
+### 8. encoding.length_delimiter
+
+- **Target:** `encoding.LengthDelimiter`
+- **Similarity:** 0.81
+- **Dependents:** 0
+- **Priority Score:** 301.9
+- **Functions:** 3/3 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched
+- **Missing types:** _none_
+
+### 9. lib
+
+- **Target:** `prost.Lib [ZERO]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 10.0
+- **Functions:** 0/0 matched (target 2)
+- **Missing functions:** _none_
+- **Types:** 0/0 matched
+- **Missing types:** _none_
+
 ## Success Criteria
 
 For each file to be considered "complete":
@@ -58,17 +140,4 @@ For each file to be considered "complete":
 - All tests ported
 - Documentation ported
 - port-lint header present
-
-## Reexport / Wiring Modules
-
-These files match `reexport_modules` patterns in `.ast_distance_config.json`. They are filtered out of
-normal priority and missing-file ladders because they are wiring
-modules, not direct logic ports. Consult them for call-site routing;
-do not treat them as the next implementation target by default.
-
-### Missing
-
-| Source | Expected target | Deps | Source path | Expected path |
-|--------|-----------------|------|-------------|---------------|
-| `lib` | `Lib` | 0 | `lib.rs` | `Lib.kt` |
 
