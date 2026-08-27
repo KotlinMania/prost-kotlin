@@ -1,4 +1,4 @@
-// port-lint: source lib.rs
+// port-lint: source prost/src/lib.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.prost.encoding.decodeLengthDelimiter

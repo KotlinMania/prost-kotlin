@@ -1,4 +1,4 @@
-// port-lint: source message.rs
+// port-lint: source prost/src/message.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.bytes.BytesMut

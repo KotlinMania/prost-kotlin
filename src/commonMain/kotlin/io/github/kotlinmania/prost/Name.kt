@@ -1,4 +1,4 @@
-// port-lint: source name.rs
+// port-lint: source prost/src/name.rs
 package io.github.kotlinmania.prost
 
 /**
