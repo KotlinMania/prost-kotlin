@@ -1,4 +1,4 @@
-// port-lint: tests message.rs
+// port-lint: tests prost/src/message.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.bytes.Bytes
