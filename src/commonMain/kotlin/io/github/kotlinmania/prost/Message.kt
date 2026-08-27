@@ -111,13 +111,20 @@ interface Message {
     /**
      * Decodes an instance of the message from a byte array, merging it into this instance.
      */
-    fun merge(bytes: ByteArray): Result<Unit> = merge(io.github.kotlinmania.bytes.buf.ByteArrayBuf(bytes))
+    fun merge(bytes: ByteArray): Result<Unit> =
+        merge(
+            io.github.kotlinmania.bytes.buf
+                .ByteArrayBuf(bytes),
+        )
 
     /**
      * Decodes an instance of the message from [Bytes], merging it into this instance.
      */
     fun merge(bytes: io.github.kotlinmania.bytes.Bytes): Result<Unit> =
-        merge(io.github.kotlinmania.bytes.buf.ByteArrayBuf(bytes.asSlice()))
+        merge(
+            io.github.kotlinmania.bytes.buf
+                .ByteArrayBuf(bytes.asSlice()),
+        )
 
     /**
      * Decodes a length-delimited instance of the message from buffer, and
@@ -130,13 +137,19 @@ interface Message {
      * Decodes a length-delimited instance of the message from a byte array.
      */
     fun mergeLengthDelimited(bytes: ByteArray): Result<Unit> =
-        mergeLengthDelimited(io.github.kotlinmania.bytes.buf.ByteArrayBuf(bytes))
+        mergeLengthDelimited(
+            io.github.kotlinmania.bytes.buf
+                .ByteArrayBuf(bytes),
+        )
 
     /**
      * Decodes a length-delimited instance of the message from [Bytes].
      */
     fun mergeLengthDelimited(bytes: io.github.kotlinmania.bytes.Bytes): Result<Unit> =
-        mergeLengthDelimited(io.github.kotlinmania.bytes.buf.ByteArrayBuf(bytes.asSlice()))
+        mergeLengthDelimited(
+            io.github.kotlinmania.bytes.buf
+                .ByteArrayBuf(bytes.asSlice()),
+        )
 
     /**
      * Clears the message, resetting all fields to their default.

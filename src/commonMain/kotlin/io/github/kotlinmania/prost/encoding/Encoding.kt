@@ -2,7 +2,6 @@
 package io.github.kotlinmania.prost.encoding
 
 import io.github.kotlinmania.bytes.Bytes
-import io.github.kotlinmania.bytes.BytesMut
 import io.github.kotlinmania.bytes.buf.Buf
 import io.github.kotlinmania.bytes.buf.BufMut
 import io.github.kotlinmania.prost.DecodeError
@@ -114,39 +113,40 @@ fun skipField(
     val limitCheck = ctx.limitReached()
     if (limitCheck.isFailure) return limitCheck
 
-    val len: Int = when (wireType) {
-        WireType.Varint -> {
-            val varintRes = decodeVarint(buf)
-            if (varintRes.isFailure) return Result.failure(varintRes.exceptionOrNull()!!)
-            0
-        }
-        WireType.ThirtyTwoBit -> 4
-        WireType.SixtyFourBit -> 8
-        WireType.LengthDelimited -> {
-            val lenRes = decodeVarint(buf)
-            if (lenRes.isFailure) return Result.failure(lenRes.exceptionOrNull()!!)
-            val l = lenRes.getOrThrow()
-            if (l > Int.MAX_VALUE.toULong()) return Result.failure(DecodeError(DecodeErrorKind.LengthDelimiterTooLarge))
-            l.toInt()
-        }
-        WireType.StartGroup -> {
-            while (true) {
-                val keyRes = decodeKey(buf)
-                if (keyRes.isFailure) return Result.failure(keyRes.exceptionOrNull()!!)
-                val (innerTag, innerWireType) = keyRes.getOrThrow()
-                if (innerWireType == WireType.EndGroup) {
-                    if (innerTag != tag) {
-                        return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
-                    }
-                    break
-                }
-                val skipRes = skipField(innerWireType, innerTag, buf, ctx.enterRecursion())
-                if (skipRes.isFailure) return skipRes
+    val len: Int =
+        when (wireType) {
+            WireType.Varint -> {
+                val varintRes = decodeVarint(buf)
+                if (varintRes.isFailure) return Result.failure(varintRes.exceptionOrNull()!!)
+                0
             }
-            0
+            WireType.ThirtyTwoBit -> 4
+            WireType.SixtyFourBit -> 8
+            WireType.LengthDelimited -> {
+                val lenRes = decodeVarint(buf)
+                if (lenRes.isFailure) return Result.failure(lenRes.exceptionOrNull()!!)
+                val l = lenRes.getOrThrow()
+                if (l > Int.MAX_VALUE.toULong()) return Result.failure(DecodeError(DecodeErrorKind.LengthDelimiterTooLarge))
+                l.toInt()
+            }
+            WireType.StartGroup -> {
+                while (true) {
+                    val keyRes = decodeKey(buf)
+                    if (keyRes.isFailure) return Result.failure(keyRes.exceptionOrNull()!!)
+                    val (innerTag, innerWireType) = keyRes.getOrThrow()
+                    if (innerWireType == WireType.EndGroup) {
+                        if (innerTag != tag) {
+                            return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
+                        }
+                        break
+                    }
+                    val skipRes = skipField(innerWireType, innerTag, buf, ctx.enterRecursion())
+                    if (skipRes.isFailure) return skipRes
+                }
+                0
+            }
+            WireType.EndGroup -> return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
         }
-        WireType.EndGroup -> return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
-    }
 
     if (len > buf.remaining()) {
         return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -184,26 +184,31 @@ object BoolEncoding {
         for (v in values) encodeVarint(if (v) 1uL else 0uL, buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Boolean>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Boolean>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Boolean): Int = keyLen(tag) + encodedLenVarint(if (value) 1uL else 0uL)
+
     fun encodedLenRepeated(tag: UInt, values: List<Boolean>): Int = keyLen(tag) * values.size + values.size
+
     fun encodedLenPacked(tag: UInt, values: List<Boolean>): Int {
         if (values.isEmpty()) return 0
         val len = values.size
@@ -236,26 +241,31 @@ object Int32Encoding {
         for (v in values) encodeVarint(v.toLong().toULong(), buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Int): Int = keyLen(tag) + encodedLenVarint(value.toLong().toULong())
+
     fun encodedLenRepeated(tag: UInt, values: List<Int>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(it.toLong().toULong()) }
+
     fun encodedLenPacked(tag: UInt, values: List<Int>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(it.toLong().toULong()) }
@@ -288,26 +298,31 @@ object Int64Encoding {
         for (v in values) encodeVarint(v.toULong(), buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Long): Int = keyLen(tag) + encodedLenVarint(value.toULong())
+
     fun encodedLenRepeated(tag: UInt, values: List<Long>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(it.toULong()) }
+
     fun encodedLenPacked(tag: UInt, values: List<Long>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(it.toULong()) }
@@ -340,26 +355,31 @@ object UInt32Encoding {
         for (v in values) encodeVarint(v.toULong(), buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<UInt>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<UInt>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: UInt): Int = keyLen(tag) + encodedLenVarint(value.toULong())
+
     fun encodedLenRepeated(tag: UInt, values: List<UInt>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(it.toULong()) }
+
     fun encodedLenPacked(tag: UInt, values: List<UInt>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(it.toULong()) }
@@ -391,26 +411,31 @@ object UInt64Encoding {
         for (v in values) encodeVarint(v, buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<ULong>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<ULong>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: ULong): Int = keyLen(tag) + encodedLenVarint(value)
+
     fun encodedLenRepeated(tag: UInt, values: List<ULong>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(it) }
+
     fun encodedLenPacked(tag: UInt, values: List<ULong>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(it) }
@@ -451,26 +476,31 @@ object SInt32Encoding {
         for (v in values) encodeVarint(toZigzag(v), buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Int): Int = keyLen(tag) + encodedLenVarint(toZigzag(value))
+
     fun encodedLenRepeated(tag: UInt, values: List<Int>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(toZigzag(it)) }
+
     fun encodedLenPacked(tag: UInt, values: List<Int>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(toZigzag(it)) }
@@ -511,26 +541,31 @@ object SInt64Encoding {
         for (v in values) encodeVarint(toZigzag(v), buf)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.Varint, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Long): Int = keyLen(tag) + encodedLenVarint(toZigzag(value))
+
     fun encodedLenRepeated(tag: UInt, values: List<Long>): Int = keyLen(tag) * values.size + values.sumOf { encodedLenVarint(toZigzag(it)) }
+
     fun encodedLenPacked(tag: UInt, values: List<Long>): Int {
         if (values.isEmpty()) return 0
         val len = values.sumOf { encodedLenVarint(toZigzag(it)) }
@@ -563,26 +598,31 @@ object Fixed32Encoding {
         for (v in values) buf.putU32Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<UInt>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<UInt>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.ThirtyTwoBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: UInt): Int = keyLen(tag) + 4
+
     fun encodedLenRepeated(tag: UInt, values: List<UInt>): Int = (keyLen(tag) + 4) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<UInt>): Int {
         if (values.isEmpty()) return 0
         val len = 4 * values.size
@@ -615,26 +655,31 @@ object Fixed64Encoding {
         for (v in values) buf.putU64Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<ULong>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<ULong>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.SixtyFourBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: ULong): Int = keyLen(tag) + 8
+
     fun encodedLenRepeated(tag: UInt, values: List<ULong>): Int = (keyLen(tag) + 8) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<ULong>): Int {
         if (values.isEmpty()) return 0
         val len = 8 * values.size
@@ -667,26 +712,31 @@ object SFixed32Encoding {
         for (v in values) buf.putI32Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Int>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.ThirtyTwoBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Int): Int = keyLen(tag) + 4
+
     fun encodedLenRepeated(tag: UInt, values: List<Int>): Int = (keyLen(tag) + 4) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<Int>): Int {
         if (values.isEmpty()) return 0
         val len = 4 * values.size
@@ -719,26 +769,31 @@ object SFixed64Encoding {
         for (v in values) buf.putI64Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Long>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.SixtyFourBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Long): Int = keyLen(tag) + 8
+
     fun encodedLenRepeated(tag: UInt, values: List<Long>): Int = (keyLen(tag) + 8) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<Long>): Int {
         if (values.isEmpty()) return 0
         val len = 8 * values.size
@@ -771,26 +826,31 @@ object FloatEncoding {
         for (v in values) buf.putF32Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Float>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Float>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.ThirtyTwoBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Float): Int = keyLen(tag) + 4
+
     fun encodedLenRepeated(tag: UInt, values: List<Float>): Int = (keyLen(tag) + 4) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<Float>): Int {
         if (values.isEmpty()) return 0
         val len = 4 * values.size
@@ -823,26 +883,31 @@ object DoubleEncoding {
         for (v in values) buf.putF64Le(v)
     }
 
-    fun mergeRepeated(wireType: WireType, values: MutableList<Double>, buf: Buf, ctx: DecodeContext): Result<Unit> {
-        return if (wireType == WireType.LengthDelimited) {
+    fun mergeRepeated(wireType: WireType, values: MutableList<Double>, buf: Buf, ctx: DecodeContext): Result<Unit> =
+        if (wireType == WireType.LengthDelimited) {
             mergeLoop(values, buf, ctx) { list, b, c ->
                 val res = merge(WireType.SixtyFourBit, b, c)
                 if (res.isSuccess) {
                     list.add(res.getOrThrow())
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
         } else {
             val res = merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 values.add(res.getOrThrow())
                 Result.success(Unit)
-            } else Result.failure(res.exceptionOrNull()!!)
+            } else {
+                Result.failure(res.exceptionOrNull()!!)
+            }
         }
-    }
 
     fun encodedLen(tag: UInt, value: Double): Int = keyLen(tag) + 8
+
     fun encodedLenRepeated(tag: UInt, values: List<Double>): Int = (keyLen(tag) + 8) * values.size
+
     fun encodedLenPacked(tag: UInt, values: List<Double>): Int {
         if (values.isEmpty()) return 0
         val len = 8 * values.size
@@ -1152,8 +1217,9 @@ object MapEncoding {
         for ((key, value) in values) {
             val skipKey = key == null
             val skipVal = value == valDefault
-            val len = (if (skipKey) 0 else keyEncodedLen(1u, key)) +
-                (if (skipVal) 0 else valEncodedLen(2u, value))
+            val len =
+                (if (skipKey) 0 else keyEncodedLen(1u, key)) +
+                    (if (skipVal) 0 else valEncodedLen(2u, value))
 
             encodeKey(tag, WireType.LengthDelimited, buf)
             encodeVarint(len.toULong(), buf)
@@ -1181,26 +1247,27 @@ object MapEncoding {
         var currentKey = defaultKey
         var currentVal = defaultVal
 
-        val loopRes = mergeLoop(Unit, buf, ctx.enterRecursion()) { _, b, c ->
-            val keyRes = decodeKey(b)
-            if (keyRes.isFailure) return@mergeLoop Result.failure(keyRes.exceptionOrNull()!!)
-            val (tag, wireType) = keyRes.getOrThrow()
-            when (tag) {
-                1u -> {
-                    val kRes = keyMerge(wireType, b, c)
-                    if (kRes.isFailure) return@mergeLoop Result.failure(kRes.exceptionOrNull()!!)
-                    currentKey = kRes.getOrThrow()
-                    Result.success(Unit)
+        val loopRes =
+            mergeLoop(Unit, buf, ctx.enterRecursion()) { _, b, c ->
+                val keyRes = decodeKey(b)
+                if (keyRes.isFailure) return@mergeLoop Result.failure(keyRes.exceptionOrNull()!!)
+                val (tag, wireType) = keyRes.getOrThrow()
+                when (tag) {
+                    1u -> {
+                        val kRes = keyMerge(wireType, b, c)
+                        if (kRes.isFailure) return@mergeLoop Result.failure(kRes.exceptionOrNull()!!)
+                        currentKey = kRes.getOrThrow()
+                        Result.success(Unit)
+                    }
+                    2u -> {
+                        val vRes = valMerge(wireType, b, c)
+                        if (vRes.isFailure) return@mergeLoop Result.failure(vRes.exceptionOrNull()!!)
+                        currentVal = vRes.getOrThrow()
+                        Result.success(Unit)
+                    }
+                    else -> skipField(wireType, tag, b, c)
                 }
-                2u -> {
-                    val vRes = valMerge(wireType, b, c)
-                    if (vRes.isFailure) return@mergeLoop Result.failure(vRes.exceptionOrNull()!!)
-                    currentVal = vRes.getOrThrow()
-                    Result.success(Unit)
-                }
-                else -> skipField(wireType, tag, b, c)
             }
-        }
 
         if (loopRes.isSuccess) {
             values[currentKey] = currentVal
@@ -1218,8 +1285,9 @@ object MapEncoding {
     ): Int {
         var total = 0
         for ((key, value) in values) {
-            val len = (if (key == null) 0 else keyEncodedLen(1u, key)) +
-                (if (value == valDefault || value == null) 0 else valEncodedLen(2u, value))
+            val len =
+                (if (key == null) 0 else keyEncodedLen(1u, key)) +
+                    (if (value == valDefault || value == null) 0 else valEncodedLen(2u, value))
             total += keyLen(tag) + encodedLenVarint(len.toULong()) + len
         }
         return total

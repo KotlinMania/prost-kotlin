@@ -1,11 +1,8 @@
 // port-lint: tests encoding.rs
 package io.github.kotlinmania.prost
 
-import io.github.kotlinmania.bytes.Bytes
 import io.github.kotlinmania.bytes.BytesMut
 import io.github.kotlinmania.bytes.buf.ByteArrayBuf
-import io.github.kotlinmania.prost.encoding.BoolEncoding
-import io.github.kotlinmania.prost.encoding.BytesEncoding
 import io.github.kotlinmania.prost.encoding.DecodeContext
 import io.github.kotlinmania.prost.encoding.DoubleEncoding
 import io.github.kotlinmania.prost.encoding.Fixed32Encoding
@@ -92,73 +89,193 @@ class EncodingTest {
         // Int32
         val i32Buf = BytesMut.withCapacity(32)
         Int32Encoding.encode(1u, -12345, i32Buf)
-        val i32Decoded = Int32Encoding.merge(WireType.Varint, i32Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val i32Decoded =
+            Int32Encoding
+                .merge(
+                    WireType.Varint,
+                    i32Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-12345, i32Decoded)
 
         // Int64
         val i64Buf = BytesMut.withCapacity(32)
         Int64Encoding.encode(2u, -9876543210L, i64Buf)
-        val i64Decoded = Int64Encoding.merge(WireType.Varint, i64Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val i64Decoded =
+            Int64Encoding
+                .merge(
+                    WireType.Varint,
+                    i64Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-9876543210L, i64Decoded)
 
         // UInt32
         val u32Buf = BytesMut.withCapacity(32)
         UInt32Encoding.encode(3u, 12345u, u32Buf)
-        val u32Decoded = UInt32Encoding.merge(WireType.Varint, u32Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val u32Decoded =
+            UInt32Encoding
+                .merge(
+                    WireType.Varint,
+                    u32Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(12345u, u32Decoded)
 
         // UInt64
         val u64Buf = BytesMut.withCapacity(32)
         UInt64Encoding.encode(4u, 9876543210uL, u64Buf)
-        val u64Decoded = UInt64Encoding.merge(WireType.Varint, u64Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val u64Decoded =
+            UInt64Encoding
+                .merge(
+                    WireType.Varint,
+                    u64Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(9876543210uL, u64Decoded)
 
         // SInt32
         val s32Buf = BytesMut.withCapacity(32)
         SInt32Encoding.encode(5u, -12345, s32Buf)
-        val s32Decoded = SInt32Encoding.merge(WireType.Varint, s32Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val s32Decoded =
+            SInt32Encoding
+                .merge(
+                    WireType.Varint,
+                    s32Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-12345, s32Decoded)
 
         // SInt64
         val s64Buf = BytesMut.withCapacity(32)
         SInt64Encoding.encode(6u, -9876543210L, s64Buf)
-        val s64Decoded = SInt64Encoding.merge(WireType.Varint, s64Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val s64Decoded =
+            SInt64Encoding
+                .merge(
+                    WireType.Varint,
+                    s64Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-9876543210L, s64Decoded)
 
         // Fixed32
         val f32Buf = BytesMut.withCapacity(32)
         Fixed32Encoding.encode(7u, 0x12345678u, f32Buf)
-        val f32Decoded = Fixed32Encoding.merge(WireType.ThirtyTwoBit, f32Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val f32Decoded =
+            Fixed32Encoding
+                .merge(
+                    WireType.ThirtyTwoBit,
+                    f32Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(0x12345678u, f32Decoded)
 
         // Fixed64
         val f64Buf = BytesMut.withCapacity(32)
         Fixed64Encoding.encode(8u, 0x123456789ABCDEF0uL, f64Buf)
-        val f64Decoded = Fixed64Encoding.merge(WireType.SixtyFourBit, f64Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val f64Decoded =
+            Fixed64Encoding
+                .merge(
+                    WireType.SixtyFourBit,
+                    f64Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(0x123456789ABCDEF0uL, f64Decoded)
 
         // SFixed32
         val sf32Buf = BytesMut.withCapacity(32)
         SFixed32Encoding.encode(9u, -42, sf32Buf)
-        val sf32Decoded = SFixed32Encoding.merge(WireType.ThirtyTwoBit, sf32Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val sf32Decoded =
+            SFixed32Encoding
+                .merge(
+                    WireType.ThirtyTwoBit,
+                    sf32Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-42, sf32Decoded)
 
         // SFixed64
         val sf64Buf = BytesMut.withCapacity(32)
         SFixed64Encoding.encode(10u, -99999999L, sf64Buf)
-        val sf64Decoded = SFixed64Encoding.merge(WireType.SixtyFourBit, sf64Buf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val sf64Decoded =
+            SFixed64Encoding
+                .merge(
+                    WireType.SixtyFourBit,
+                    sf64Buf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(-99999999L, sf64Decoded)
 
         // Float
         val fltBuf = BytesMut.withCapacity(32)
         FloatEncoding.encode(11u, 3.14159f, fltBuf)
-        val fltDecoded = FloatEncoding.merge(WireType.ThirtyTwoBit, fltBuf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val fltDecoded =
+            FloatEncoding
+                .merge(
+                    WireType.ThirtyTwoBit,
+                    fltBuf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(3.14159f, fltDecoded, 1e-5f)
 
         // Double
         val dblBuf = BytesMut.withCapacity(32)
         DoubleEncoding.encode(12u, 2.718281828459, dblBuf)
-        val dblDecoded = DoubleEncoding.merge(WireType.SixtyFourBit, dblBuf.freeze().asSlice().asBuf().apply { decodeKey(this) }, DecodeContext()).getOrThrow()
+        val dblDecoded =
+            DoubleEncoding
+                .merge(
+                    WireType.SixtyFourBit,
+                    dblBuf
+                        .freeze()
+                        .asSlice()
+                        .asBuf()
+                        .apply { decodeKey(this) },
+                    DecodeContext(),
+                ).getOrThrow()
         assertEquals(2.718281828459, dblDecoded)
     }
 
@@ -198,15 +315,16 @@ class EncodingTest {
         while (readBuf.hasRemaining()) {
             val (tag, _) = decodeKey(readBuf).getOrThrow()
             assertEquals(5u, tag)
-            MapEncoding.merge(
-                keyMerge = { wt, b, c -> StringEncoding.merge(wt, b, c) },
-                valMerge = { wt, b, c -> Int32Encoding.merge(wt, b, c) },
-                defaultKey = "",
-                defaultVal = 0,
-                values = decodedMap,
-                buf = readBuf,
-                ctx = DecodeContext(),
-            ).getOrThrow()
+            MapEncoding
+                .merge(
+                    keyMerge = { wt, b, c -> StringEncoding.merge(wt, b, c) },
+                    valMerge = { wt, b, c -> Int32Encoding.merge(wt, b, c) },
+                    defaultKey = "",
+                    defaultVal = 0,
+                    values = decodedMap,
+                    buf = readBuf,
+                    ctx = DecodeContext(),
+                ).getOrThrow()
         }
 
         assertEquals(map, decodedMap)

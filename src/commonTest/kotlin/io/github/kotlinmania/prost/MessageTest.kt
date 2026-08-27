@@ -1,7 +1,6 @@
 // port-lint: tests message.rs
 package io.github.kotlinmania.prost
 
-import io.github.kotlinmania.bytes.Bytes
 import io.github.kotlinmania.bytes.buf.Buf
 import io.github.kotlinmania.bytes.buf.BufMut
 import io.github.kotlinmania.prost.encoding.DecodeContext
@@ -10,7 +9,6 @@ import io.github.kotlinmania.prost.encoding.StringEncoding
 import io.github.kotlinmania.prost.encoding.WireType
 import io.github.kotlinmania.prost.encoding.skipField
 import kotlin.test.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class TestPerson(
@@ -31,25 +29,28 @@ class TestPerson(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return when (tag) {
+    ): Result<Unit> =
+        when (tag) {
             1u -> {
                 val res = Int32Encoding.merge(wireType, buf, ctx)
                 if (res.isSuccess) {
                     id = res.getOrThrow()
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
             2u -> {
                 val res = StringEncoding.merge(wireType, buf, ctx)
                 if (res.isSuccess) {
                     name = res.getOrThrow()
                     Result.success(Unit)
-                } else Result.failure(res.exceptionOrNull()!!)
+                } else {
+                    Result.failure(res.exceptionOrNull()!!)
+                }
             }
             else -> skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int {
         var len = 0

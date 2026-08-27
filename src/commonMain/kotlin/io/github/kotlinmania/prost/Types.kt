@@ -24,7 +24,8 @@ private fun googleapisTypeUrl(packageName: String, typeName: String): String =
  */
 data class BoolValue(
     var value: Boolean = false,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "BoolValue"
     override val packageName: String = "google.protobuf"
 
@@ -41,8 +42,8 @@ data class BoolValue(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = BoolEncoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -53,7 +54,6 @@ data class BoolValue(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value) 2 else 0
 
@@ -67,7 +67,8 @@ data class BoolValue(
  */
 data class UInt32Value(
     var value: UInt = 0u,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "UInt32Value"
     override val packageName: String = "google.protobuf"
 
@@ -84,8 +85,8 @@ data class UInt32Value(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = UInt32Encoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -96,7 +97,6 @@ data class UInt32Value(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0u) UInt32Encoding.encodedLen(1u, value) else 0
 
@@ -110,7 +110,8 @@ data class UInt32Value(
  */
 data class UInt64Value(
     var value: ULong = 0uL,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "UInt64Value"
     override val packageName: String = "google.protobuf"
 
@@ -127,8 +128,8 @@ data class UInt64Value(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = UInt64Encoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -139,7 +140,6 @@ data class UInt64Value(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0uL) UInt64Encoding.encodedLen(1u, value) else 0
 
@@ -153,7 +153,8 @@ data class UInt64Value(
  */
 data class Int32Value(
     var value: Int = 0,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "Int32Value"
     override val packageName: String = "google.protobuf"
 
@@ -170,8 +171,8 @@ data class Int32Value(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = Int32Encoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -182,7 +183,6 @@ data class Int32Value(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0) Int32Encoding.encodedLen(1u, value) else 0
 
@@ -196,7 +196,8 @@ data class Int32Value(
  */
 data class Int64Value(
     var value: Long = 0L,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "Int64Value"
     override val packageName: String = "google.protobuf"
 
@@ -213,8 +214,8 @@ data class Int64Value(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = Int64Encoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -225,7 +226,6 @@ data class Int64Value(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0L) Int64Encoding.encodedLen(1u, value) else 0
 
@@ -239,7 +239,8 @@ data class Int64Value(
  */
 data class FloatValue(
     var value: Float = 0.0f,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "FloatValue"
     override val packageName: String = "google.protobuf"
 
@@ -256,8 +257,8 @@ data class FloatValue(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = FloatEncoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -268,7 +269,6 @@ data class FloatValue(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0.0f) FloatEncoding.encodedLen(1u, value) else 0
 
@@ -282,7 +282,8 @@ data class FloatValue(
  */
 data class DoubleValue(
     var value: Double = 0.0,
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "DoubleValue"
     override val packageName: String = "google.protobuf"
 
@@ -299,8 +300,8 @@ data class DoubleValue(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = DoubleEncoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -311,7 +312,6 @@ data class DoubleValue(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value != 0.0) DoubleEncoding.encodedLen(1u, value) else 0
 
@@ -325,7 +325,8 @@ data class DoubleValue(
  */
 data class StringValue(
     var value: String = "",
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "StringValue"
     override val packageName: String = "google.protobuf"
 
@@ -342,8 +343,8 @@ data class StringValue(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = StringEncoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -354,7 +355,6 @@ data class StringValue(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value.isNotEmpty()) StringEncoding.encodedLen(1u, value) else 0
 
@@ -368,7 +368,8 @@ data class StringValue(
  */
 data class BytesValue(
     var value: ByteArray = ByteArray(0),
-) : Message, Name {
+) : Message,
+    Name {
     override val typeName: String = "BytesValue"
     override val packageName: String = "google.protobuf"
 
@@ -385,8 +386,8 @@ data class BytesValue(
         wireType: WireType,
         buf: Buf,
         ctx: DecodeContext,
-    ): Result<Unit> {
-        return if (tag == 1u) {
+    ): Result<Unit> =
+        if (tag == 1u) {
             val res = BytesEncoding.merge(wireType, buf, ctx)
             if (res.isSuccess) {
                 value = res.getOrThrow()
@@ -397,7 +398,6 @@ data class BytesValue(
         } else {
             skipField(wireType, tag, buf, ctx)
         }
-    }
 
     override fun encodedLen(): Int = if (value.isNotEmpty()) BytesEncoding.encodedLen(1u, value) else 0
 

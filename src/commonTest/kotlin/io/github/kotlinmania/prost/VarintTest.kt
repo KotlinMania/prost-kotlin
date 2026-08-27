@@ -1,7 +1,6 @@
 // port-lint: tests encoding/varint.rs
 package io.github.kotlinmania.prost
 
-import io.github.kotlinmania.bytes.Bytes
 import io.github.kotlinmania.bytes.BytesMut
 import io.github.kotlinmania.prost.encoding.decodeVarint
 import io.github.kotlinmania.prost.encoding.encodeVarint
@@ -69,10 +68,19 @@ class VarintTest {
 
     @Test
     fun testVarintOverflow() {
-        val u64MaxPlusOne = byteArrayOf(
-            0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(),
-            0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0x02,
-        )
+        val u64MaxPlusOne =
+            byteArrayOf(
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0xFF.toByte(),
+                0x02,
+            )
         val buf = u64MaxPlusOne.asBuf()
         val res = decodeVarint(buf)
         assertTrue(res.isFailure, "decoding u64::MAX + 1 should fail")
