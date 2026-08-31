@@ -423,7 +423,9 @@ data object Empty : Message, Name {
 
     override fun typeUrl(): String = googleapisTypeUrl(packageName, typeName)
 
-    override fun encodeRaw(buf: BufMut) {}
+    override fun encodeRaw(buf: BufMut) {
+        buf.hashCode()
+    }
 
     override fun mergeField(
         tag: UInt,
