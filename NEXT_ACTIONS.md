@@ -4,12 +4,12 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 9/9 (100.0%)
-- **Function parity:** 44/68 matched (target 266) — 64.7%
+- **Files Present:** 9/10 (90.0%)
+- **Function parity:** 44/70 matched (target 266) — 62.9%
 - **Class/type parity:** 8/12 matched (target 55) — 66.7%
-- **Combined symbol parity:** 52/80 matched (target 321) — 65.0%
-- **Average inline-code cosine:** 0.47 (function body across 9 matched files)
-- **Average documentation cosine:** 0.78 (doc text across 9 matched files)
+- **Combined symbol parity:** 52/82 matched (target 321) — 63.4%
+- **Average inline-code cosine:** 0.53 (function body across 8 matched files)
+- **Average documentation cosine:** 0.87 (doc text across 8 matched files)
 - **Cheat-zeroed Files:** 1
 - **Critical Issues:** 7 files with <0.60 function similarity
 
@@ -27,7 +27,7 @@ No missing high-value files detected.
 
 Every matched file is listed below with function and type symbol parity.
 
-### 1. message
+### 1. prost.message
 
 - **Target:** `prost.Message`
 - **Similarity:** 0.45
@@ -49,7 +49,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Error`
 
-### 3. name
+### 3. prost.name
 
 - **Target:** `prost.Name`
 - **Similarity:** 0.47
@@ -60,7 +60,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched
 - **Missing types:** _none_
 
-### 4. encoding
+### 4. prost.encoding
 
 - **Target:** `encoding.Encoding`
 - **Similarity:** 0.50
@@ -71,9 +71,8 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 20)
 - **Missing types:** `DropGuard`, `BytesAdapter`
 - **Tests:** 0/4 matched
-- **Lint issues:** 16
 
-### 5. error
+### 5. prost.error
 
 - **Target:** `prost.Error`
 - **Similarity:** 0.27
@@ -97,7 +96,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 0/4 matched
 
-### 7. types
+### 7. prost.types
 
 - **Target:** `prost.Types`
 - **Similarity:** 0.47
@@ -108,7 +107,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 11)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Lint issues:** 1
 
 ### 8. encoding.length_delimiter
 
@@ -121,9 +119,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched
 - **Missing types:** _none_
 
-### 9. lib
+### 9. prost.lib
 
-- **Target:** `prost.Lib [ZERO]`
+- **Target:** `prost.Lib [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 10.0

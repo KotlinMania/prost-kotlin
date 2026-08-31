@@ -1,4 +1,4 @@
-// port-lint: source error.rs
+// port-lint: source prost/src/error.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.prost.encoding.WireType

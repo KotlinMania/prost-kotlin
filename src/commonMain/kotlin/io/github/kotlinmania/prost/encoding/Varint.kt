@@ -1,4 +1,4 @@
-// port-lint: source encoding/varint.rs
+// port-lint: source prost/src/encoding/varint.rs
 package io.github.kotlinmania.prost.encoding
 
 import io.github.kotlinmania.bytes.buf.Buf

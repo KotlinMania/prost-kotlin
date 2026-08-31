@@ -1,4 +1,4 @@
-// port-lint: source encoding.rs
+// port-lint: source prost/src/encoding.rs
 package io.github.kotlinmania.prost.encoding
 
 import io.github.kotlinmania.bytes.Bytes
