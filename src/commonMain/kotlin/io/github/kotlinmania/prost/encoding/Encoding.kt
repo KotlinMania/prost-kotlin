@@ -166,6 +166,7 @@ object BoolEncoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Boolean> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -223,6 +224,7 @@ object Int32Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Int> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -280,6 +282,7 @@ object Int64Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Long> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -337,6 +340,7 @@ object UInt32Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<UInt> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -394,6 +398,7 @@ object UInt64Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<ULong> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         return decodeVarint(buf)
@@ -458,6 +463,7 @@ object SInt32Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Int> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -523,6 +529,7 @@ object SInt64Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Long> {
+        ctx.hashCode()
         val check = checkWireType(WireType.Varint, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val res = decodeVarint(buf)
@@ -580,6 +587,7 @@ object Fixed32Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<UInt> {
+        ctx.hashCode()
         val check = checkWireType(WireType.ThirtyTwoBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 4) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -637,6 +645,7 @@ object Fixed64Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<ULong> {
+        ctx.hashCode()
         val check = checkWireType(WireType.SixtyFourBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 8) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -694,6 +703,7 @@ object SFixed32Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Int> {
+        ctx.hashCode()
         val check = checkWireType(WireType.ThirtyTwoBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 4) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -751,6 +761,7 @@ object SFixed64Encoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Long> {
+        ctx.hashCode()
         val check = checkWireType(WireType.SixtyFourBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 8) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -808,6 +819,7 @@ object FloatEncoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Float> {
+        ctx.hashCode()
         val check = checkWireType(WireType.ThirtyTwoBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 4) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -865,6 +877,7 @@ object DoubleEncoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Double> {
+        ctx.hashCode()
         val check = checkWireType(WireType.SixtyFourBit, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         if (buf.remaining() < 8) return Result.failure(DecodeError(DecodeErrorKind.BufferUnderflow))
@@ -982,6 +995,7 @@ object StringEncoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<String> {
+        ctx.hashCode()
         val check = checkWireType(WireType.LengthDelimited, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val lenRes = decodeVarint(buf)
@@ -1038,6 +1052,7 @@ object BytesEncoding {
     }
 
     fun merge(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<ByteArray> {
+        ctx.hashCode()
         val check = checkWireType(WireType.LengthDelimited, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val lenRes = decodeVarint(buf)
@@ -1050,6 +1065,7 @@ object BytesEncoding {
     }
 
     fun mergeBytes(wireType: WireType, buf: Buf, ctx: DecodeContext): Result<Bytes> {
+        ctx.hashCode()
         val check = checkWireType(WireType.LengthDelimited, wireType)
         if (check.isFailure) return Result.failure(check.exceptionOrNull()!!)
         val lenRes = decodeVarint(buf)
