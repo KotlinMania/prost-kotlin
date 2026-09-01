@@ -4,13 +4,13 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 9/9 (100.0%)
-- **Function parity:** 44/68 matched (target 266) — 64.7%
+- **Files Present:** 9/10 (90.0%)
+- **Function parity:** 44/70 matched (target 264) — 62.9%
 - **Class/type parity:** 8/12 matched (target 55) — 66.7%
-- **Combined symbol parity:** 52/80 matched (target 321) — 65.0%
+- **Combined symbol parity:** 52/82 matched (target 319) — 63.4%
 - **Average inline-code cosine:** 0.53 (function body across 8 matched files)
 - **Average documentation cosine:** 0.87 (doc text across 8 matched files)
-- **Cheat-zeroed Files:** 1
+- **Cheat-zeroed Files:** 0
 - **Critical Issues:** 7 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
@@ -27,9 +27,9 @@ No missing high-value files detected.
 
 Every matched file is listed below with function and type symbol parity.
 
-### 1. message
+### 1. prost.message
 
-- **Target:** `prost.Message [PROVENANCE-FALLBACK]`
+- **Target:** `prost.Message`
 - **Similarity:** 0.45
 - **Dependents:** 4
 - **Priority Score:** 4041305.5
@@ -37,15 +37,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `encode_to_vec`, `encode_length_delimited_to_vec`, `decode`, `decode_length_delimited`
 - **Types:** 1/1 matched (target 3)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/message.rs` vs expected `message.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:prost/src/message.rs` vs expected `message.rs`
-- **Proposed provenance header:** `// port-lint: source message.rs` (current: `// port-lint: source prost/src/message.rs`)
-- **Proposed provenance header:** `// port-lint: tests message.rs` (current: `// port-lint: tests prost/src/message.rs`)
-- **Lint issues:** 2
 
 ### 2. encoding.wire_type
 
-- **Target:** `encoding.WireType [PROVENANCE-FALLBACK]`
+- **Target:** `encoding.WireType`
 - **Similarity:** 0.75
 - **Dependents:** 3
 - **Priority Score:** 3010402.5
@@ -53,13 +48,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Error`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/encoding/wire_type.rs` vs expected `encoding/wire_type.rs`
-- **Proposed provenance header:** `// port-lint: source encoding/wire_type.rs` (current: `// port-lint: source prost/src/encoding/wire_type.rs`)
-- **Lint issues:** 1
 
-### 3. name
+### 3. prost.name
 
-- **Target:** `prost.Name [PROVENANCE-FALLBACK]`
+- **Target:** `prost.Name`
 - **Similarity:** 0.47
 - **Dependents:** 2
 - **Priority Score:** 2000305.2
@@ -67,13 +59,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/1 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/name.rs` vs expected `name.rs`
-- **Proposed provenance header:** `// port-lint: source name.rs` (current: `// port-lint: source prost/src/name.rs`)
-- **Lint issues:** 1
 
-### 4. encoding
+### 4. prost.encoding
 
-- **Target:** `encoding.Encoding [PROVENANCE-FALLBACK]`
+- **Target:** `encoding.Encoding`
 - **Similarity:** 0.50
 - **Dependents:** 0
 - **Priority Score:** 132705.0
@@ -82,15 +71,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 20)
 - **Missing types:** `DropGuard`, `BytesAdapter`
 - **Tests:** 0/4 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/encoding.rs` vs expected `encoding.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:prost/src/encoding.rs` vs expected `encoding.rs`
-- **Proposed provenance header:** `// port-lint: source encoding.rs` (current: `// port-lint: source prost/src/encoding.rs`)
-- **Proposed provenance header:** `// port-lint: tests encoding.rs` (current: `// port-lint: tests prost/src/encoding.rs`)
-- **Lint issues:** 2
 
-### 5. error
+### 5. prost.error
 
-- **Target:** `prost.Error [PROVENANCE-FALLBACK]`
+- **Target:** `prost.Error`
 - **Similarity:** 0.27
 - **Dependents:** 0
 - **Priority Score:** 51407.3
@@ -99,15 +83,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/5 matched (target 18)
 - **Missing types:** `Inner`
 - **Tests:** 1/2 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/error.rs` vs expected `error.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:prost/src/error.rs` vs expected `error.rs`
-- **Proposed provenance header:** `// port-lint: source error.rs` (current: `// port-lint: source prost/src/error.rs`)
-- **Proposed provenance header:** `// port-lint: tests error.rs` (current: `// port-lint: tests prost/src/error.rs`)
-- **Lint issues:** 2
 
 ### 6. encoding.varint
 
-- **Target:** `encoding.Varint [PROVENANCE-FALLBACK]`
+- **Target:** `encoding.Varint`
 - **Similarity:** 0.49
 - **Dependents:** 0
 - **Priority Score:** 40905.1
@@ -116,15 +95,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 - **Tests:** 0/4 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/encoding/varint.rs` vs expected `encoding/varint.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:prost/src/encoding/varint.rs` vs expected `encoding/varint.rs`
-- **Proposed provenance header:** `// port-lint: source encoding/varint.rs` (current: `// port-lint: source prost/src/encoding/varint.rs`)
-- **Proposed provenance header:** `// port-lint: tests encoding/varint.rs` (current: `// port-lint: tests prost/src/encoding/varint.rs`)
-- **Lint issues:** 2
 
-### 7. types
+### 7. prost.types
 
-- **Target:** `prost.Types [PROVENANCE-FALLBACK]`
+- **Target:** `prost.Types`
 - **Similarity:** 0.47
 - **Dependents:** 0
 - **Priority Score:** 10705.3
@@ -133,15 +107,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 11)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/types.rs` vs expected `types.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:prost/src/types.rs` vs expected `types.rs`
-- **Proposed provenance header:** `// port-lint: source types.rs` (current: `// port-lint: source prost/src/types.rs`)
-- **Proposed provenance header:** `// port-lint: tests types.rs` (current: `// port-lint: tests prost/src/types.rs`)
-- **Lint issues:** 2
 
 ### 8. encoding.length_delimiter
 
-- **Target:** `encoding.LengthDelimiter [PROVENANCE-FALLBACK]`
+- **Target:** `encoding.LengthDelimiter`
 - **Similarity:** 0.81
 - **Dependents:** 0
 - **Priority Score:** 301.9
@@ -149,23 +118,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/encoding/length_delimiter.rs` vs expected `encoding/length_delimiter.rs`
-- **Proposed provenance header:** `// port-lint: source encoding/length_delimiter.rs` (current: `// port-lint: source prost/src/encoding/length_delimiter.rs`)
-- **Lint issues:** 1
-
-### 9. lib
-
-- **Target:** `prost.Lib [STUB] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 10.0
-- **Functions:** 0/0 matched (target 2)
-- **Missing functions:** _none_
-- **Types:** 0/0 matched
-- **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `prost/src/lib.rs` vs expected `lib.rs`
-- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source prost/src/lib.rs`)
-- **Lint issues:** 1
 
 ## Success Criteria
 
@@ -175,4 +127,17 @@ For each file to be considered "complete":
 - All tests ported
 - Documentation ported
 - port-lint header present
+
+## Reexport / Wiring Modules
+
+These files match `reexport_modules` patterns in `.ast_distance_config.json`. They are filtered out of
+normal priority and missing-file ladders because they are wiring
+modules, not direct logic ports. Consult them for call-site routing;
+do not treat them as the next implementation target by default.
+
+### Matched
+
+| Source | Target | Path |
+|--------|--------|------|
+| `prost.lib` | `prost.Lib` | `prost/src/lib` |
 
