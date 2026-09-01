@@ -1,4 +1,4 @@
-// port-lint: tests prost/src/encoding.rs
+// port-lint: tests encoding.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.bytes.BytesMut

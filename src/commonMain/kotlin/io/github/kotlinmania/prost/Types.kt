@@ -1,4 +1,4 @@
-// port-lint: source prost/src/types.rs
+// port-lint: source types.rs
 package io.github.kotlinmania.prost
 
 import io.github.kotlinmania.bytes.buf.Buf

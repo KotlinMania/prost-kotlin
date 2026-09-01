@@ -1,4 +1,4 @@
-// port-lint: tests prost/src/error.rs
+// port-lint: tests error.rs
 package io.github.kotlinmania.prost
 
 import kotlin.test.Test
