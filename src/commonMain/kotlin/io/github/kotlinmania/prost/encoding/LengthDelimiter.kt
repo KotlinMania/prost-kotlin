@@ -1,4 +1,4 @@
-// port-lint: source prost/src/encoding/length_delimiter.rs
+// port-lint: source encoding/length_delimiter.rs
 package io.github.kotlinmania.prost.encoding
 
 import io.github.kotlinmania.bytes.buf.Buf

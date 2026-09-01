@@ -2,7 +2,7 @@
   "type": "port",
   "name": "prost-kotlin",
   "source": {
-    "path": "tmp",
+    "path": "tmp/prost/src",
     "lang": "rust"
   },
   "target": {

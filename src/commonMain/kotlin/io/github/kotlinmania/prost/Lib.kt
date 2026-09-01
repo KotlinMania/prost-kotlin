@@ -1,4 +1,4 @@
-// port-lint: source prost/src/lib.rs
+// port-lint: source lib.rs
 package io.github.kotlinmania.prost
 
 // Re-exports of public API symbols

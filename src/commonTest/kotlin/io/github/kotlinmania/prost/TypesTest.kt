@@ -1,4 +1,4 @@
-// port-lint: tests prost/src/types.rs
+// port-lint: tests types.rs
 package io.github.kotlinmania.prost
 
 import kotlin.test.Test
