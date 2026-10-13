@@ -13,10 +13,10 @@ import kotlin.math.min
  */
 fun encodeVarint(value: ULong, buf: BufMut) {
     var v = value
-    for (i in 0 until 10) {
+    repeat(10) {
         if (v < 0x80uL) {
             buf.putU8(v.toUByte())
-            break
+            return
         } else {
             buf.putU8(((v and 0x7FuL) or 0x80uL).toUByte())
             v = v shr 7

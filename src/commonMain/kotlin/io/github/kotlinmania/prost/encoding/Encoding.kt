@@ -120,15 +120,25 @@ fun skipField(
                 if (varintRes.isFailure) return Result.failure(varintRes.exceptionOrNull()!!)
                 0
             }
-            WireType.ThirtyTwoBit -> 4
-            WireType.SixtyFourBit -> 8
+
+            WireType.ThirtyTwoBit -> {
+                4
+            }
+
+            WireType.SixtyFourBit -> {
+                8
+            }
+
             WireType.LengthDelimited -> {
                 val lenRes = decodeVarint(buf)
                 if (lenRes.isFailure) return Result.failure(lenRes.exceptionOrNull()!!)
                 val l = lenRes.getOrThrow()
-                if (l > Int.MAX_VALUE.toULong()) return Result.failure(DecodeError(DecodeErrorKind.LengthDelimiterTooLarge))
+                if (l > Int.MAX_VALUE.toULong()) {
+                    return Result.failure(DecodeError(DecodeErrorKind.LengthDelimiterTooLarge))
+                }
                 l.toInt()
             }
+
             WireType.StartGroup -> {
                 while (true) {
                     val keyRes = decodeKey(buf)
@@ -145,7 +155,10 @@ fun skipField(
                 }
                 0
             }
-            WireType.EndGroup -> return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
+
+            WireType.EndGroup -> {
+                return Result.failure(DecodeError(DecodeErrorKind.UnexpectedEndGroupTag))
+            }
         }
 
     if (len > buf.remaining()) {
@@ -1275,13 +1288,17 @@ object MapEncoding {
                         currentKey = kRes.getOrThrow()
                         Result.success(Unit)
                     }
+
                     2u -> {
                         val vRes = valMerge(wireType, b, c)
                         if (vRes.isFailure) return@mergeLoop Result.failure(vRes.exceptionOrNull()!!)
                         currentVal = vRes.getOrThrow()
                         Result.success(Unit)
                     }
-                    else -> skipField(wireType, tag, b, c)
+
+                    else -> {
+                        skipField(wireType, tag, b, c)
+                    }
                 }
             }
 
