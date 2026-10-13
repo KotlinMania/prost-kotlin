@@ -40,6 +40,7 @@ class TestPerson(
                     Result.failure(res.exceptionOrNull()!!)
                 }
             }
+
             2u -> {
                 val res = StringEncoding.merge(wireType, buf, ctx)
                 if (res.isSuccess) {
@@ -49,7 +50,10 @@ class TestPerson(
                     Result.failure(res.exceptionOrNull()!!)
                 }
             }
-            else -> skipField(wireType, tag, buf, ctx)
+
+            else -> {
+                skipField(wireType, tag, buf, ctx)
+            }
         }
 
     override fun encodedLen(): Int {
