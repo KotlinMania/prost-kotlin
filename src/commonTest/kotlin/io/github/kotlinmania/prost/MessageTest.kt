@@ -98,4 +98,25 @@ class MessageTest {
         decoded.mergeLengthDelimited(bytes).getOrThrow()
         assertEquals(person, decoded)
     }
+
+    @Test
+    fun testEncodeToVecAndDecodeHelpers() {
+        val person = TestPerson(id = 789, name = "Charlie")
+        val vec = person.encodeToVec()
+        val decodedFromBytes = decode(vec) { TestPerson() }.getOrThrow()
+        assertEquals(person, decodedFromBytes)
+
+        val decodedFromBuf = decode(vec.asBuf()) { TestPerson() }.getOrThrow()
+        assertEquals(person, decodedFromBuf)
+
+        val delimitedVec = person.encodeLengthDelimitedToVec()
+        val decodedDelimitedBytes = decodeLengthDelimited(delimitedVec) { TestPerson() }.getOrThrow()
+        assertEquals(person, decodedDelimitedBytes)
+
+        val decodedDelimitedBuf = decodeLengthDelimited(delimitedVec.asBuf()) { TestPerson() }.getOrThrow()
+        assertEquals(person, decodedDelimitedBuf)
+
+        person.clear()
+        assertEquals(TestPerson(0, ""), person)
+    }
 }

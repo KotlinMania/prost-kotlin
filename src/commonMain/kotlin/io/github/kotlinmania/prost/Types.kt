@@ -16,7 +16,17 @@ import io.github.kotlinmania.prost.encoding.UInt64Encoding
 import io.github.kotlinmania.prost.encoding.WireType
 import io.github.kotlinmania.prost.encoding.skipField
 
-private fun googleapisTypeUrl(packageName: String, typeName: String): String =
+/**
+ * Compute the type URL for the given `google.protobuf` type, using `type.googleapis.com` as the
+ * authority for the URL.
+ */
+fun <T : Name> googleapisTypeUrlFor(name: T): String =
+    "type.googleapis.com/${name.packageName}.${name.typeName}"
+
+/**
+ * Compute the type URL for a package and type name using `type.googleapis.com` authority.
+ */
+fun googleapisTypeUrl(packageName: String, typeName: String): String =
     "type.googleapis.com/$packageName.$typeName"
 
 /**

@@ -70,6 +70,16 @@ class DecodeError : Exception {
 
     companion object {
         /**
+         * Creates a new [DecodeError] with a "best effort" root cause description.
+         */
+        @Deprecated(
+            "This function was meant for internal use only. Because of internal-only documentation it " +
+                "was publicly available and it is actually used by users. The prost project intents to " +
+                "remove this function in the next breaking release.",
+        )
+        fun new(description: String): DecodeError = DecodeError(DecodeErrorKind.Other(description))
+
+        /**
          * Creates a new [DecodeError] with a [DecodeErrorKind.UnexpectedTypeUrl].
          *
          * Must only be used by `Any` implementation.
@@ -187,6 +197,11 @@ class EncodeError internal constructor(
         other is EncodeError && required == other.required && remaining == other.remaining
 
     override fun hashCode(): Int = 31 * required + remaining
+
+    companion object {
+        /** Creates a new [EncodeError]. */
+        fun new(required: Int, remaining: Int): EncodeError = EncodeError(required, remaining)
+    }
 }
 
 /**

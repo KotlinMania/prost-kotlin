@@ -85,4 +85,40 @@ class VarintTest {
         val res = decodeVarint(buf)
         assertTrue(res.isFailure, "decoding u64::MAX + 1 should fail")
     }
+
+    @Test
+    fun testBenchmarkRanges() {
+        val testValues = mutableListOf<ULong>()
+        // small: 0 until 100
+        for (i in 0uL until 100uL) {
+            testValues.add(i)
+        }
+        // medium: (1 << 28) until (1 << 28) + 100
+        val baseMed = 1uL shl 28
+        for (i in 0uL until 100uL) {
+            testValues.add(baseMed + i)
+        }
+        // large: (1 << 63) until (1 << 63) + 100
+        val baseLarge = 1uL shl 63
+        for (i in 0uL until 100uL) {
+            testValues.add(baseLarge + i)
+        }
+        // mixed: 10 widths, 10 offsets each
+        for (width in 0..9) {
+            val exp = width * 7
+            val baseMixed = if (exp == 0) 0uL else (1uL shl exp)
+            for (offset in 0uL..9uL) {
+                testValues.add(baseMixed + offset)
+            }
+        }
+
+        for (value in testValues) {
+            val buf = BytesMut.withCapacity(10)
+            encodeVarint(value, buf)
+            val bytes = buf.freeze().asSlice()
+            assertEquals(encodedLenVarint(value), bytes.size)
+            val decoded = decodeVarint(bytes.asBuf()).getOrThrow()
+            assertEquals(value, decoded)
+        }
+    }
 }
