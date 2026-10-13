@@ -17,5 +17,20 @@ class ErrorTest {
         )
     }
 
+    @Test
+    fun testFactories() {
+        @Suppress("DEPRECATION")
+        val decodeErr = DecodeError.new("something went wrong")
+        assertEquals("failed to decode Protobuf message: something went wrong", decodeErr.message)
+
+        val encodeErr = EncodeError.new(10, 5)
+        assertEquals(10, encodeErr.requiredCapacity())
+        assertEquals(5, encodeErr.remaining())
+        assertEquals(
+            "failed to encode Protobuf message; insufficient buffer capacity (required: 10, remaining: 5)",
+            encodeErr.message,
+        )
+    }
+
     // testIntoStdIoError unported: std::io::Error conversion is specific to Rust std library and does not apply to Kotlin Multiplatform common errors.
 }

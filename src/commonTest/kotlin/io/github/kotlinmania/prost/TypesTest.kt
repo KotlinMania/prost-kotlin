@@ -66,6 +66,9 @@ class TypesTest {
         assertEquals("google.protobuf", emptyVal.packageName)
         assertEquals("google.protobuf.Empty", emptyVal.fullName())
         assertEquals("type.googleapis.com/google.protobuf.Empty", emptyVal.typeUrl())
+        assertEquals("type.googleapis.com/google.protobuf.Empty", googleapisTypeUrlFor(emptyVal))
+        assertEquals("type.googleapis.com/google.protobuf.BoolValue", googleapisTypeUrlFor(boolVal))
+        assertEquals("type.googleapis.com/foo.Bar", googleapisTypeUrl("foo", "Bar"))
     }
 
     @Test
