@@ -5,6 +5,7 @@ serialization = "1.11.0"
 datetime = "0.8.0"
 collectionsImmutable = "0.5.2"
 bytes = "0.2.1"
+serdeCore = "0.1.10"
 androidKmp = "9.4.1"
 detekt = "2.0.0-alpha.6"
 ktlint = "14.2.0"
@@ -27,6 +28,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 bytes-kotlin = { module = "io.github.kotlinmania:bytes-kotlin", version.ref = "bytes" }
+serde-core = { module = "io.github.kotlinmania:serde-core", version.ref = "serdeCore" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinxBenchmark" }
 
 [bundles]
@@ -37,4 +39,5 @@ prost-commonMain = [
   "kotlinx-datetime",
   "collections-immutable",
   "bytes-kotlin",
+  "serde-core",
 ]
